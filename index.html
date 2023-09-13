@@ -31,8 +31,8 @@
                         canvas.height = img.height;
                         ctx.drawImage(img, 0, 0);
 
-                        // Convert canvas to JPG with the highest quality (1.0)
-                        const jpgDataUrl = canvas.toDataURL('image/jpeg', 1.0);
+                        // Convert canvas to JPG with a quality of 0.9 (adjust as needed)
+                        const jpgDataUrl = canvas.toDataURL('image/jpeg', 0.9);
 
                         // Create a download link for the JPG
                         const a = document.createElement('a');
