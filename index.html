@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG to JPG Converter</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/3.1.1/svg.min.js"></script>
+</head>
+<body>
+    <input type="file" id="svgFile" accept=".svg">
+    <button onclick="convertToJpg()">Convert to JPG</button>
+    <canvas id="canvas" style="display: none;"></canvas>
+
+    <script>
+        function convertToJpg() {
+            const svgFile = document.getElementById('svgFile').files[0];
+            if (svgFile) {
+                const canvas = document.getElementById('canvas');
+                const ctx = canvas.getContext('2d');
+
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    const svgText = e.target.result;
+
+                    // Create an SVG.js instance and load the SVG text
+                    const draw = SVG().addTo('body').size(0, 0);
+                    const importedSVG = draw.svg(svgText);
+
+                    // Get the dimensions of the SVG
+                    const width = importedSVG.bbox().width;
+                    const height = importedSVG.bbox().height;
+
+                    // Set canvas dimensions
+                    canvas.width = width;
+                    canvas.height = height;
+
+                    // Render the SVG onto the canvas
+                    canvg(canvas, svgText, {
+                        renderCallback: function () {
+                            // Convert canvas to JPG with the highest quality (1.0)
+                            const jpgDataUrl = canvas.toDataURL('image/jpeg', 1.0);
+
+                            // Create a download link for the JPG
+                            const a = document.createElement('a');
+                            a.href = jpgDataUrl;
+                            a.download = 'converted.jpg';
+                            a.style.display = 'none';
+                            document.body.appendChild(a);
+                            a.click();
+                            document.body.removeChild(a);
+
+                            // Clean up the SVG.js instance
+                            draw.remove();
+                        }
+                    });
+                };
+
+                reader.readAsText(svgFile);
+            }
+        }
+    </script>
+</body>
+</html>
