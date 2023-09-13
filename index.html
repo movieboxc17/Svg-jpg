@@ -4,12 +4,96 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SVG to JPG Converter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('https://i.ibb.co/DCf8pGr/converted.jpg'); /* Set the background image URL here */
+            background-repeat: no-repeat;
+            background-size: cover;
+            margin: 0; /* Remove the default margin */
+            padding: 0;
+        }
+
+        header {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 24px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8); /* Add a semi-transparent background color to make content readable */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        label {
+            display: inline-block;
+            background-color: #007BFF;
+            color: #fff;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #convertedImage {
+            display: none;
+            margin-top: 20px;
+            max-width: 100%;
+        }
+
+        #downloadButton {
+            display: none;
+            background-color: #007BFF;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+    </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/canvg/3.0.4/canvg.min.js"></script>
 </head>
 <body>
-    <input type="file" id="svgFile" accept=".svg">
-    <button onclick="convertToJpg()">Convert to JPG</button>
-    <canvas id="canvas" style="display: none;"></canvas>
+    <header>
+        <h1>SVG to JPG Converter</h1>
+    </header>
+    <div class="container">
+        <input type="file" id="svgFile" accept=".svg">
+        <label for="svgFile">Choose an SVG File</label>
+        <button onclick="convertToJpg()">Convert to JPG</button>
+        <canvas id="canvas" style="display: none;"></canvas>
+        <img id="convertedImage" src="" alt="Converted JPG">
+        <a id="downloadButton" href="#" download="converted.jpg">Download JPG</a>
+    </div>
 
     <script>
         function convertToJpg() {
@@ -17,6 +101,8 @@
             if (svgFile) {
                 const canvas = document.getElementById('canvas');
                 const ctx = canvas.getContext('2d');
+                const convertedImage = document.getElementById('convertedImage');
+                const downloadButton = document.getElementById('downloadButton');
 
                 const reader = new FileReader();
 
@@ -34,14 +120,13 @@
                         // Convert canvas to JPG with the highest quality (1.0)
                         const jpgDataUrl = canvas.toDataURL('image/jpeg', 1.0);
 
-                        // Create a download link for the JPG
-                        const a = document.createElement('a');
-                        a.href = jpgDataUrl;
-                        a.download = 'converted.jpg';
-                        a.style.display = 'none';
-                        document.body.appendChild(a);
-                        a.click();
-                        document.body.removeChild(a);
+                        // Display the converted image
+                        convertedImage.src = jpgDataUrl;
+                        convertedImage.style.display = 'block';
+
+                        // Enable the download button
+                        downloadButton.href = jpgDataUrl;
+                        downloadButton.style.display = 'inline-block';
                     };
 
                     img.src = "data:image/svg+xml;base64," + btoa(svgText);
