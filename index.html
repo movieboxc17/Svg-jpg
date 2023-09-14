@@ -8,31 +8,32 @@
     <style>
         body {
             font-family: 'Roboto', sans-serif;
-            background-image: url('https://i.ibb.co/nLTts6d/converted-3.jpg');
-            background-repeat: no-repeat;
-            background-size: cover;
+            background-image: linear-gradient(to bottom right, #4e54c8, #8f94fb);
             margin: 0;
             padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
 
         header {
-            background-color: #3498db;
-            color: #fff;
-            padding: 40px 0;
             text-align: center;
+            margin-bottom: 20px;
         }
 
         h1 {
             font-size: 36px;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
 
         .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
             background-color: rgba(255, 255, 255, 0.9);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             border-radius: 8px;
+            padding: 20px;
+            text-align: center;
         }
 
         input[type="file"] {
@@ -41,34 +42,40 @@
 
         label {
             display: inline-block;
-            background-color: #3498db;
+            background-color: #6c5ce7;
             color: #fff;
             padding: 15px 30px;
             cursor: pointer;
-            border-radius: 5px;
+            border-radius: 25px;
             font-size: 18px;
             margin-bottom: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        label:hover {
+            background-color: #4834d4;
         }
 
         button {
-            background-color: #3498db;
+            background-color: #e74c3c;
             color: #fff;
             padding: 15px 30px;
             border: none;
             cursor: pointer;
-            border-radius: 5px;
+            border-radius: 25px;
             font-size: 18px;
             transition: background-color 0.3s ease;
         }
 
         button:hover {
-            background-color: #2980b9;
+            background-color: #c0392b;
         }
 
         #convertedImage {
             display: none;
             margin-top: 20px;
             max-width: 100%;
+            border-radius: 8px;
         }
 
         #downloadButton {
@@ -78,8 +85,16 @@
             padding: 15px 30px;
             border: none;
             cursor: pointer;
-            border-radius: 5px;
+            border-radius: 25px;
             font-size: 18px;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+            margin-top: 20px;
+            display: inline-block;
+        }
+
+        #downloadButton:hover {
+            background-color: #2980b9;
         }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/canvg/3.0.4/canvg.min.js"></script>
@@ -91,9 +106,11 @@
     <div class="container">
         <input type="file" id="svgFile" accept=".svg">
         <label for="svgFile">Choose an SVG File</label>
+        <br>
         <button onclick="convertToJpg()">Convert to JPG</button>
         <canvas id="canvas" style="display: none;"></canvas>
         <img id="convertedImage" src="" alt="Converted JPG">
+        <br>
         <a id="downloadButton" href="#" download="converted.jpg">Download JPG</a>
     </div>
 
