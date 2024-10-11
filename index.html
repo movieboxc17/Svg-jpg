@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SVG to JPG Converter</title>
+    <title>Image Format Converter</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
     <style>
         body {
             font-family: 'Roboto', sans-serif;
-            background: linear-gradient(135deg, #74ebd5 0%, #ACB6E5 100%);
+            background: linear-gradient(135deg, #8EC5FC 0%, #E0C3FC 100%);
             margin: 0;
             padding: 0;
             display: flex;
@@ -16,6 +17,7 @@
             align-items: center;
             min-height: 100vh;
             color: #333;
+            animation: fadeIn 1.5s ease;
         }
 
         header {
@@ -25,22 +27,23 @@
         }
 
         h1 {
-            font-size: 40px;
+            font-size: 42px;
             font-weight: 500;
             color: #fff;
-            margin-bottom: 0;
-            letter-spacing: 1px;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
         }
 
         .container {
             background-color: #ffffff;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
-            border-radius: 12px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+            border-radius: 16px;
             padding: 50px;
             text-align: center;
             max-width: 600px;
             width: 90%;
-            animation: slideUp 0.8s ease;
+            animation: slideUp 1.2s ease;
         }
 
         input[type="file"] {
@@ -49,9 +52,9 @@
 
         label {
             display: block;
-            background-color: #3498db;
+            background-color: #4A90E2;
             color: #ffffff;
-            padding: 15px 35px;
+            padding: 15px 40px;
             cursor: pointer;
             border-radius: 30px;
             font-size: 18px;
@@ -60,25 +63,64 @@
         }
 
         label:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 15px rgba(52, 152, 219, 0.4);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px rgba(74, 144, 226, 0.5);
+        }
+
+        .format-options {
+            margin: 20px 0;
+        }
+
+        select {
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 18px;
+            border: 2px solid #ddd;
+            background-color: #f9f9f9;
+            color: #333;
+            outline: none;
+            transition: border 0.3s ease;
+        }
+
+        select:focus {
+            border-color: #4A90E2;
         }
 
         button {
-            background-color: #e74c3c;
+            background-color: #E74C3C;
             color: #ffffff;
-            padding: 15px 35px;
+            padding: 15px 40px;
             border: none;
             cursor: pointer;
             border-radius: 30px;
             font-size: 18px;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            margin-top: 10px;
+            margin-top: 15px;
         }
 
         button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 15px rgba(231, 76, 60, 0.4);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px rgba(231, 76, 60, 0.5);
+        }
+
+        #spinner {
+            display: none;
+            margin-top: 20px;
+            position: relative;
+            width: 40px;
+            height: 40px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        #spinner div {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 4px solid transparent;
+            border-top-color: #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
         }
 
         #convertedImage {
@@ -87,14 +129,15 @@
             max-width: 100%;
             border-radius: 12px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-            transition: opacity 0.5s ease;
+            opacity: 0;
+            transition: opacity 0.8s ease;
         }
 
         #downloadButton {
             display: none;
             background-color: #3498db;
             color: #fff;
-            padding: 15px 35px;
+            padding: 15px 40px;
             border: none;
             cursor: pointer;
             border-radius: 30px;
@@ -107,7 +150,7 @@
 
         #downloadButton:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 15px rgba(52, 152, 219, 0.4);
+            box-shadow: 0 10px 20px rgba(52, 152, 219, 0.5);
         }
 
         /* Animations */
@@ -116,6 +159,7 @@
                 opacity: 0;
                 transform: translateY(-20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -127,13 +171,33 @@
                 opacity: 0;
                 transform: translateY(50px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
 
-        /* Mobile Responsiveness */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
         @media (max-width: 600px) {
             .container {
                 padding: 30px;
@@ -143,70 +207,101 @@
                 font-size: 32px;
             }
 
-            label, button, #downloadButton {
-                padding: 12px 25px;
+            label,
+            button,
+            #downloadButton {
+                padding: 12px 30px;
                 font-size: 16px;
             }
         }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/canvg/3.0.4/canvg.min.js"></script>
 </head>
+
 <body>
     <header>
-        <h1>SVG to JPG Converter</h1>
+        <h1>Image Format Converter</h1>
     </header>
     <div class="container">
-        <input type="file" id="svgFile" accept=".svg">
-        <label for="svgFile">Choose an SVG File</label>
-        <br>
-        <button onclick="convertToJpg()">Convert to JPG</button>
+        <input type="file" id="imageFile" accept=".svg,.png,.jpg">
+        <label for="imageFile">Choose an Image File</label>
+
+        <div class="format-options">
+            <label for="formatSelect">Choose output format:</label>
+            <select id="formatSelect">
+                <option value="jpg">JPG</option>
+                <option value="png">PNG</option>
+                <option value="webp">WebP</option>
+            </select>
+        </div>
+
+        <button onclick="convertImage()">Convert</button>
+
+        <div id="spinner">
+            <div></div>
+        </div>
+
         <canvas id="canvas" style="display: none;"></canvas>
-        <img id="convertedImage" src="" alt="Converted JPG">
+        <img id="convertedImage" src="" alt="Converted Image">
         <br>
-        <a id="downloadButton" href="#" download="converted.jpg">Download JPG</a>
+        <a id="downloadButton" href="#" download="converted-image">Download</a>
     </div>
 
     <script>
-        function convertToJpg() {
-            const svgFile = document.getElementById('svgFile').files[0];
-            if (svgFile) {
-                const canvas = document.getElementById('canvas');
-                const ctx = canvas.getContext('2d');
-                const convertedImage = document.getElementById('convertedImage');
-                const downloadButton = document.getElementById('downloadButton');
+        function convertImage() {
+            const imageFile = document.getElementById('imageFile').files[0];
+            const selectedFormat = document.getElementById('formatSelect').value;
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+            const convertedImage = document.getElementById('convertedImage');
+            const downloadButton = document.getElementById('downloadButton');
+            const spinner = document.getElementById('spinner');
+
+            if (imageFile) {
+                spinner.style.display = 'block';  // Show the spinner
+                convertedImage.style.display = 'none';
+                downloadButton.style.display = 'none';
 
                 const reader = new FileReader();
 
                 reader.onload = function (e) {
-                    const svgText = e.target.result;
-
-                    // Create a new Image element
                     const img = new Image();
-
                     img.onload = function () {
                         canvas.width = img.width;
                         canvas.height = img.height;
                         ctx.drawImage(img, 0, 0);
 
-                        // Convert canvas to JPG with the highest quality (1.0)
-                        const jpgDataUrl = canvas.toDataURL('image/jpeg', 1.0);
+                        let dataUrl;
+                        let downloadName = `converted-image.${selectedFormat}`;
 
-                        // Display the converted image
-                        convertedImage.src = jpgDataUrl;
-                        convertedImage.style.display = 'block';
-                        convertedImage.style.opacity = '1';
+                        if (selectedFormat === 'jpg') {
+                            dataUrl = canvas.toDataURL('image/jpeg', 1.0);
+                        } else if (selectedFormat === 'png') {
+                            dataUrl = canvas.toDataURL('image/png');
+                        } else if (selectedFormat === 'webp') {
+                            dataUrl = canvas.toDataURL('image/webp');
+                        }
 
-                        // Enable the download button
-                        downloadButton.href = jpgDataUrl;
-                        downloadButton.style.display = 'inline-block';
+                        convertedImage.src = dataUrl;
+
+                        setTimeout(function () {
+                            convertedImage.style.display = 'block';
+                            convertedImage.style.opacity = '1';
+                            spinner.style.display = 'none';  // Hide the spinner
+
+                            downloadButton.href = dataUrl;
+                            downloadButton.download = downloadName;
+                            downloadButton.style.display = 'inline-block';
+                        }, 1000);  // Simulate a short delay to emphasize conversion
                     };
 
-                    img.src = "data:image/svg+xml;base64," + btoa(svgText);
+                    img.src = e.target.result;
                 };
 
-                reader.readAsText(svgFile);
+                reader.readAsDataURL(imageFile);
             }
         }
     </script>
 </body>
+
 </html>
